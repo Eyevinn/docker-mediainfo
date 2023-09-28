@@ -35,7 +35,9 @@ jobs:
         id: mediainfo-version
         env:
           VERSION: ${{ steps.meta.outputs.version }}
-        run: echo "version=${VERSION%%-*}" >> "$GITHUB_OUTPUT"
+        run: |
+          VERSION=${VERSION#v}
+          echo "version=${VERSION%%-*}" >> "$GITHUB_OUTPUT"
         
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
