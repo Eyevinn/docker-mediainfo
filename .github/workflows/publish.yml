@@ -34,7 +34,7 @@ jobs:
       - name: Extract mediainfo-version
         id: mediainfo-version
         env:
-          VERSION: ${{ steps.meta.output.version }}
+          VERSION: ${{ steps.meta.outputs.version }}
         run: echo "version=${VERSION%%-*}" >> "$GITHUB_OUTPUT"
         
       - name: Build and push Docker image
