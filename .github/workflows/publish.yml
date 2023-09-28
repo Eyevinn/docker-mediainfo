@@ -35,11 +35,7 @@ jobs:
         id: mediainfo-version
         env:
           VERSION: ${{ steps.meta.output.version }}
-        run: |
-          echo ::set-output name=version::"${VERSION%%-*}"
-        outputs:
-          version:
-            description: Version of mediainfo to build
+        run: echo "version=${VERSION%%-*}" >> "$GITHUB_OUTPUT"
         
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -48,6 +44,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
-            MEDIAINFO_VERSION=${{ steps.mediainfo-version.output.version }}
+            MEDIAINFO_VERSION=${{ steps.mediainfo-version.outputs.version }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
