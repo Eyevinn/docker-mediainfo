@@ -22,8 +22,8 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ secrets.HUB_DOCKER_USERNAME }}
+          password: ${{ secrets.HUB_DOCKER_PASSWORD }}
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
@@ -31,6 +31,16 @@ jobs:
         with:
           images: eyevinntechnology/mediainfo
 
+      - name: Extract mediainfo-version
+        id: mediainfo-version
+        env:
+          VERSION: ${{ steps.meta.output.version }}
+        run: |
+          echo ::set-output name=version::"${VERSION%%-*}"
+        outputs:
+          version:
+            description: Version of mediainfo to build
+        
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -38,6 +48,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
-            MEDIAINFO_VERSION=${{ steps.meta.output.version }}
+            MEDIAINFO_VERSION=${{ steps.mediainfo-version.output.version }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
