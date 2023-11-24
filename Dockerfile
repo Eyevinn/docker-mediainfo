@@ -17,17 +17,17 @@ ARG MEDIAINFO_VERSION=23.09
 RUN git clone --branch v${ZENLIB_VERSION} --depth 1 https://github.com/MediaArea/ZenLib.git
 RUN cd ZenLib/Project/GNU/Library && \
     ./autogen.sh && \
-    ./configure --enable-static && \
+    ./configure --enable-static --disable-shared && \
     make install
 
 RUN git clone --branch v${MEDIAINFO_VERSION} --depth 1 https://github.com/MediaArea/MediaInfoLib.git && \
     cd MediaInfoLib/Project/GNU/Library && \
     ./autogen.sh && \
-    ./configure --enable-static && \
+    ./configure --enable-static --disable-shared && \
     make install
 
 RUN git clone --branch v${MEDIAINFO_VERSION} --depth 1 https://github.com/MediaArea/MediaInfo.git
 RUN cd MediaInfo/Project/GNU/CLI && \
     ./autogen.sh && \
-    ./configure --enable-staticlibs && \
-    make
+    ./configure --enable-staticlibs --enable-static LDFLAGS=-static-libstdc++ && \
+    make install
