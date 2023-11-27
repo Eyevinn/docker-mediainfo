@@ -9,7 +9,8 @@ RUN apt update && \
     pkg-config \
     make \
     g++ \
-    zlib1g-dev
+    zlib1g-dev \
+    libcurl4-openssl-dev
 
 ARG ZENLIB_VERSION=0.4.41
 ARG MEDIAINFO_VERSION=23.09
@@ -23,7 +24,7 @@ RUN cd ZenLib/Project/GNU/Library && \
 RUN git clone --branch v${MEDIAINFO_VERSION} --depth 1 https://github.com/MediaArea/MediaInfoLib.git && \
     cd MediaInfoLib/Project/GNU/Library && \
     ./autogen.sh && \
-    ./configure --enable-static --disable-shared && \
+    ./configure --enable-static --disable-shared --with-libcurl && \
     make install
 
 RUN git clone --branch v${MEDIAINFO_VERSION} --depth 1 https://github.com/MediaArea/MediaInfo.git
