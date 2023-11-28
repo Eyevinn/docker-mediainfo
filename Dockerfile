@@ -19,16 +19,16 @@ RUN git clone --branch v${ZENLIB_VERSION} --depth 1 https://github.com/MediaArea
 RUN cd ZenLib/Project/GNU/Library && \
     ./autogen.sh && \
     ./configure --enable-static --disable-shared && \
-    make install
+    make -j $(nproc) install
 
 RUN git clone --branch v${MEDIAINFO_VERSION} --depth 1 https://github.com/MediaArea/MediaInfoLib.git && \
     cd MediaInfoLib/Project/GNU/Library && \
     ./autogen.sh && \
     ./configure --enable-static --disable-shared --with-libcurl && \
-    make install
+    make -j $(nproc) install
 
 RUN git clone --branch v${MEDIAINFO_VERSION} --depth 1 https://github.com/MediaArea/MediaInfo.git
 RUN cd MediaInfo/Project/GNU/CLI && \
     ./autogen.sh && \
     ./configure --enable-staticlibs --enable-static LDFLAGS=-static-libstdc++ && \
-    make install
+    make -j $(nproc) install
